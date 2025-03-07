@@ -1,0 +1,21 @@
+# Ignore environment files (DO NOT push secrets)
+.env
+.htaccess
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore Composer dependencies (if used)
+vendor/
+
+# Ignore cache & logs
+cache/
+logs/
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+
+# Ignore database dumps (if any)
+*.sql
