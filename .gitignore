@@ -19,3 +19,5 @@ logs/
 
 # Ignore database dumps (if any)
 *.sql
+
+/config/Database.php
