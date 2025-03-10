@@ -1,25 +1,27 @@
-# Ignore environment files (DO NOT push secrets)
+# Ignore environment configuration files (do not store sensitive values in Git)
 .env
 .htaccess
 
-# Ignore system files
+# Composer dependencies. If you are using Composer, these files will be installed locally.
+vendor/
+
+# Node dependencies (if you ever use Node)
+node_modules/
+
+# Log files and debugging output
+*.log
+debug.log
+
+# OS-specific files
 .DS_Store
 Thumbs.db
 
-# Ignore Composer dependencies (if used)
-vendor/
-
-# Ignore cache & logs
-cache/
-logs/
-
-# Ignore IDE/editor files
-.vscode/
+# IDE/editor-specific files (for PhpStorm, Sublime Text, VS Code, etc.)
 .idea/
+*.sublime-project
+*.sublime-workspace
+.vscode/
 
-# Ignore database dumps (if any)
-*.sql
-
-/config/Database.php
-
-.htaccess
+# Cache and temporary files
+cache/
+tmp/
