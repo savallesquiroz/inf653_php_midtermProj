@@ -42,12 +42,19 @@ try {
     $quote->category_id = $data->category_id;
 
     if ($quote->create()) {
-        echo json_encode(array(
-            "id" => $db->lastInsertId(),
-            "quote" => $quote->quote,
-            "author_id" => $quote->author_id,
-            "category_id" => $quote->category_id
-        ));
+        // Fetch the last inserted quote to get the complete data
+        $last_id = $db->lastInsertId();
+        $fetch_query = "SELECT q.id, q.quote, a.author, c.category
+                        FROM quotes q
+                        JOIN authors a ON q.author_id = a.id
+                        JOIN categories c ON q.category_id = c.id
+                        WHERE q.id = :id";
+        $fetch_stmt = $db->prepare($fetch_query);
+        $fetch_stmt->bindParam(':id', $last_id);
+        $fetch_stmt->execute();
+        $quote_data = $fetch_stmt->fetch(PDO::FETCH_ASSOC);
+
+        echo json_encode($quote_data);
     } else {
         echo json_encode(array("message" => "Quote Not Created"));
     }
