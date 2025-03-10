@@ -1,13 +1,7 @@
 <?php
+// Set CORS and Content-Type headers
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
-
-require_once '../../config/Database.php';
-require_once '../../models/Quote.php';
-
-$database = new Database();
-$db = $database->connect();
-$quote = new Quote($db);
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -19,7 +13,11 @@ if ($method === 'OPTIONS') {
 
 switch ($method) {
     case 'GET':
-        require 'read.php';
+        if (isset($_GET['id'])) {
+            require 'read_single.php';
+        } else {
+            require 'read.php';
+        }
         break;
     case 'POST':
         require 'create.php';
@@ -31,7 +29,7 @@ switch ($method) {
         require 'delete.php';
         break;
     default:
-        echo json_encode(['message' => 'Invalid Request']);
+        echo json_encode(['message' => 'Method Not Allowed']);
         break;
 }
 ?>

@@ -1,25 +1,26 @@
 <?php
+// Set up CORS and headers
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
-require_once '../../config/Database.php';
-require_once '../../models/Quote.php';
-
-$database = new Database();
-$db = $database->connect();
-$quote = new Quote($db);
-
 $method = $_SERVER['REQUEST_METHOD'];
 
+// Handle preflight request
 if ($method === 'OPTIONS') {
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
     header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
     exit();
 }
 
+// Route according to the method
 switch ($method) {
     case 'GET':
-        require 'read.php';
+        // If an id is provided, use read_single; otherwise, use read
+        if (isset($_GET['id'])) {
+            require 'read_single.php';
+        } else {
+            require 'read.php';
+        }
         break;
     case 'POST':
         require 'create.php';
@@ -31,7 +32,7 @@ switch ($method) {
         require 'delete.php';
         break;
     default:
-        echo json_encode(['message' => 'Invalid Request']);
+        echo json_encode(['message' => 'Method Not Allowed']);
         break;
 }
 ?>
