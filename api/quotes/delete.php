@@ -1,17 +1,28 @@
 <?php
+// Include necessary files
+require_once '../../config/Database.php';
+require_once '../../models/Quote.php';
+
+$database = new Database();
+$db = $database->connect();
+
+// Get JSON input from the request body
 $data = json_decode(file_get_contents("php://input"));
 
-if (!isset($data->id)) {
-    echo json_encode(['message' => 'Missing Required Parameters']);
+// Validate that the id is provided
+if(empty($data->id)) {
+    echo json_encode(array("message" => "Missing Required Parameter: id"));
     exit();
 }
 
-$query = "DELETE FROM quotes WHERE id = :id";
-$stmt = $quote->conn->prepare($query);
+// Create a Quote object and assign the id
+$quote = new Quote($db);
+$quote->id = $data->id;
 
-if ($stmt->execute([':id' => $data->id])) {
-    echo json_encode(['message' => 'Quote Deleted']);
+// Attempt to delete the quote
+if($quote->delete()){
+    echo json_encode(array("message" => "Quote Deleted"));
 } else {
-    echo json_encode(['message' => 'Quote Not Deleted']);
+    echo json_encode(array("message" => "Quote Not Deleted"));
 }
 ?>

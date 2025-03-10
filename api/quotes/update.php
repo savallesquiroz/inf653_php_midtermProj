@@ -1,34 +1,31 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
-header('Access-Control-Allow-Methods: PUT');
-header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
-
+// Include database and model files
 require_once '../../config/Database.php';
 require_once '../../models/Quote.php';
 
 $database = new Database();
 $db = $database->connect();
-$quote = new Quote($db);
 
+// Get JSON input
 $data = json_decode(file_get_contents("php://input"));
 
-if (!isset($data->id, $data->quote, $data->author_id, $data->category_id)) {
-    echo json_encode(['message' => 'Missing Required Parameters']);
+// Validate required fields
+if (empty($data->id) || empty($data->quote) || empty($data->author_id) || empty($data->category_id)) {
+    echo json_encode(array("message" => "Missing Required Parameters"));
     exit();
 }
 
-$query = "UPDATE quotes SET quote = :quote, author_id = :author_id, category_id = :category_id WHERE id = :id";
-$stmt = $db->prepare($query);
+// Create Quote object and assign data
+$quote = new Quote($db);
+$quote->id = $data->id;
+$quote->quote = $data->quote;
+$quote->author_id = $data->author_id;
+$quote->category_id = $data->category_id;
 
-if ($stmt->execute([
-    ':id' => $data->id,
-    ':quote' => $data->quote,
-    ':author_id' => $data->author_id,
-    ':category_id' => $data->category_id
-])) {
-    echo json_encode(['message' => 'Quote Updated']);
+// Attempt to update the quote
+if($quote->update()){
+    echo json_encode(array("message" => "Quote Updated"));
 } else {
-    echo json_encode(['message' => 'Quote Not Updated']);
+    echo json_encode(array("message" => "Quote Not Updated"));
 }
 ?>

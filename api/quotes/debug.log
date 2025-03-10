@@ -1,0 +1,11 @@
+2025-03-10 01:51:46 Received input: {
+  "quote": "This is a new sample quote.",
+  "author_id": 5,
+  "category_id": 4
+}
+2025-03-10 01:54:02 Received input: {
+  "quote": "This is a new sample quote.",
+  "author_id": 5,
+  "category_id": 4
+}
+
