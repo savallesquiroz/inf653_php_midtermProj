@@ -2,6 +2,9 @@
 .env
 .htaccess
 
+# Docker-specific files and directories
+docker-compose.yml
+
 # Composer dependencies. If you are using Composer, these files will be installed locally.
 vendor/
 
